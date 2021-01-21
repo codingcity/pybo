@@ -8,7 +8,8 @@ from ..forms import QuestionForm
 from ..models import Question
 
 from slacker import Slacker
-import gifnoc
+
+import config.settings.gifnoc
 
 @login_required(login_url='common:login')
 def question_create(request):
@@ -22,13 +23,15 @@ def question_create(request):
             question.author = request.user  # 추가한 속성 author 적용
             question.create_date = timezone.now()
             question.save()
+            msg = '질문등록됨(작성자:' + str(question.author)+'날짜' + str(question.create_date)+')'+str(question.subject)
+            slack = Slacker(config.settings.gifnoc.token)
+            slack.chat.post_message('#general', msg)
             return redirect('pybo:index')
     else:
         form = QuestionForm()
     context = {'form': form}
 
-    slack = Slacker(gifnoc.token)
-    slack.chat.post_message('#general', '질문등록!')
+
 
     return render(request, 'pybo/question_form.html', context)
 
