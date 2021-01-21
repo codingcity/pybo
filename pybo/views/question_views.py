@@ -8,7 +8,7 @@ from ..forms import QuestionForm
 from ..models import Question
 
 from slacker import Slacker
-
+import gifnoc
 
 @login_required(login_url='common:login')
 def question_create(request):
@@ -27,7 +27,7 @@ def question_create(request):
         form = QuestionForm()
     context = {'form': form}
 
-    slack = Slacker('')
+    slack = Slacker(gifnoc.token)
     slack.chat.post_message('#general', '질문등록!')
 
     return render(request, 'pybo/question_form.html', context)
