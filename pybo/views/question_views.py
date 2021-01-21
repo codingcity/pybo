@@ -27,9 +27,9 @@ def question_create(request):
         form = QuestionForm()
     context = {'form': form}
 
-    slack = Slacker('xoxb-1683282367488-1656361909413-qf9m0qjSkj099xVaAXRXM5WV')
+    slack = Slacker('')
     slack.chat.post_message('#general', '질문등록!')
-    
+
     return render(request, 'pybo/question_form.html', context)
 
 @login_required(login_url='common:login')
